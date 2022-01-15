@@ -60,7 +60,7 @@ public class Database {
     //----------------------------------------------------------
     public Staff findStaffByID(int id) {
         Iterator < Staff > it = staffList.iterator();
-        Staff re = null;
+        staffBean = null;
         boolean found = false;
 
         if (id < 0) {
@@ -68,14 +68,14 @@ public class Database {
         }
 
         while (it.hasNext() && !found) {
-            re = (Staff) it.next();
-            if (re.getID() == id) {
+        	staffBean = (Staff) it.next();
+            if (staffBean.getID() == id) {
                 found = true;
             }
         }
 
         if (found)
-            return re;
+            return staffBean;
         else
             return null;
     }
@@ -85,7 +85,7 @@ public class Database {
     //----------------------------------------------------------
     public MenuItem findMenuItemByID(int id) {
         Iterator < MenuItem > it = menuList.iterator();
-        MenuItem re = null;
+        menuItemBean = null;
         boolean found = false;
 
         if (id < 0) {
@@ -93,14 +93,14 @@ public class Database {
         }
 
         while (it.hasNext() && !found) {
-            re = (MenuItem) it.next();
-            if (re.getID() == id) {
+        	menuItemBean = (MenuItem) it.next();
+            if (menuItemBean.getID() == id) {
                 found = true;
             }
         }
 
         if (found)
-            return re;
+            return menuItemBean;
         else
             return null;
     }
@@ -110,7 +110,7 @@ public class Database {
     //----------------------------------------------------------
     public Order findOrderByID(int id) {
         Iterator < Order > it = orderList.iterator();
-        Order re = null;
+        orderBean = null;
         boolean found = false;
 
         if (id < 0) {
@@ -118,14 +118,14 @@ public class Database {
         }
 
         while (it.hasNext() && !found) {
-            re = it.next();
-            if (re.getOrderID() == id) {
+        	orderBean = it.next();
+            if (orderBean.getOrderID() == id) {
                 found = true;
             }
         }
 
         if (found)
-            return re;
+            return orderBean;
         else
             return null;
     }
@@ -152,52 +152,52 @@ public class Database {
     }
 
     public boolean deleteOrderItem(int orderID, int index) {
-        Order rOrder = findOrderByID(orderID);
-        if (rOrder == null)
+    	orderBean = findOrderByID(orderID);
+        if (orderBean == null)
             return false;
-        return rOrder.deleteItem(index);
+        return orderBean.deleteItem(index);
     }
 
 
     //Cancel order: order data is not deleted from the database(Just put cancel flag on)
     public boolean cancelOrder(int orderID) {
-        Order rOrder = findOrderByID(orderID);
-        if (rOrder == null)
+    	orderBean = findOrderByID(orderID);
+        if (orderBean == null)
             return false;
-        rOrder.setState(Order.ORDER_CANCELED);
+        orderBean.setState(Order.ORDER_CANCELED);
         return true;
     }
     //Delete order: order data is deleted from the database
     public boolean deleteOrder(int orderID) {
-        Order rOrder = findOrderByID(orderID);
-        if (rOrder == null)
+    	orderBean = findOrderByID(orderID);
+        if (orderBean == null)
             return false;
-        orderList.remove(rOrder);
+        orderList.remove(orderBean);
         todaysOrderCounts--;
         return true;
     }
 
     public boolean closeOrder(int orderID) {
-        Order rOrder = findOrderByID(orderID);
-        if (rOrder == null)
+    	orderBean = findOrderByID(orderID);
+        if (orderBean == null)
             return false;
-        rOrder.setState(Order.ORDER_CLOSED);
+        orderBean.setState(Order.ORDER_CLOSED);
         return true;
     }
 
 
     public int getOrderState(int orderID) {
-        Order re = findOrderByID(orderID);
-        if (re == null)
+    	orderBean = findOrderByID(orderID);
+        if (orderBean == null)
             return -1;
-        return re.getState();
+        return orderBean.getState();
     }
 
     public double getOrderTotalCharge(int orderID) {
-        Order re = findOrderByID(orderID);
-        if (re == null)
+    	orderBean = findOrderByID(orderID);
+        if (orderBean == null)
             return -1;
-        return re.getTotal();
+        return orderBean.getTotal();
     }
 
 
@@ -269,8 +269,8 @@ public class Database {
                 String type = record[3].trim();
 
                 // Add the data from file to the registerCourses array list
-                MenuItem rMenuItem = new MenuItem(Integer.parseInt(id), name, Double.parseDouble(price), Byte.parseByte(type));
-                menuList.add(rMenuItem);
+                menuItemBean = new MenuItem(Integer.parseInt(id), name, Double.parseDouble(price), Byte.parseByte(type));
+                menuList.add(menuItemBean);
                 line = reader.readLine();
             }
             reader.close();

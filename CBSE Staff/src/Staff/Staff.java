@@ -20,13 +20,6 @@ public class Staff {
     //------------------------------------------------------------
     // constructor
     //------------------------------------------------------------
-    public Staff() {
-        ID = 0;
-        lastName = "";
-        firstName = "";
-        startWorkTime = null;
-        state = 0;
-    }
 
     public Staff(int newID, String newLastName, String newFirstName, String newPassword) {
         setID(newID);

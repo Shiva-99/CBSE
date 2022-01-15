@@ -1,9 +1,15 @@
 package Base;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+@ComponentScan("com.baeldung.constructordi")
+@Configuration
 @Component
+
 public class MenuItem {
     //definition of menu item type
     public final static int MAIN = 1;
@@ -18,8 +24,6 @@ public class MenuItem {
 
     public byte state;
     
-    public MenuItem(){}
-
     public MenuItem(int newID, String newName, double newPrice, byte newType) {
         this.ID = newID;
         this.name = newName;

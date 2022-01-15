@@ -1,15 +1,17 @@
 package Order;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import Base.MenuItem;
 
 @Component
+@Scope("prototype")
 public class OrderDetail {
     ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
-    MenuItem menuItemBeanNew = (MenuItem) context.getBean("menuitembean");
+    MenuItem menuItemBean = (MenuItem) context.getBean("menuitembean");
 	
     public int itemID;
     public String itemName;
@@ -17,14 +19,11 @@ public class OrderDetail {
     public byte quantity;
     public double totalPrice;
 
-    public OrderDetail() {
     
-    }
-    
-    public OrderDetail(MenuItem newMenuItem, byte newQuantity) {
-        this.itemID = newMenuItem.getID();
-        this.itemName = newMenuItem.getName();
-        this.price = newMenuItem.getPrice();
+    public OrderDetail(MenuItem menuItemBean, byte newQuantity) {
+        this.itemID = menuItemBean.getID();
+        this.itemName = menuItemBean.getName();
+        this.price = menuItemBean.getPrice();
         this.quantity = newQuantity;
         this.totalPrice = this.price * this.quantity;
     }
@@ -51,6 +50,11 @@ public class OrderDetail {
     public void addQuantity(byte add) {
         quantity += add;
         totalPrice = price * quantity;
+    }
+    
+    public OrderDetail createNew(MenuItem menuItemBean, byte newQuantity) {
+    	OrderDetail orderdetailNew = new OrderDetail(menuItemBean, newQuantity);
+    	return orderdetailNew;
     }
 
 }

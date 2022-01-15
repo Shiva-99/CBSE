@@ -109,18 +109,18 @@ public class Controller_GUI {
         final String searchClassName;
 
         //---------search user----------
-        Staff rStaff = cDatabase.findStaffByID(inputID);
+        staffBean = cDatabase.findStaffByID(inputID);
 
         if (isManager) searchClassName = "Manager";
         else searchClassName = "Employee";
 
-        if (rStaff != null) //User data is found
+        if (staffBean != null) //User data is found
         {
             //Search only particular target(Manager or Employee)
-                if (rStaff.getPassword().equals(inputPassword)) {
-                    if (rStaff.getWorkState() == 0) //Not clocked in yet
+                if (staffBean.getPassword().equals(inputPassword)) {
+                    if (staffBean.getWorkState() == 0) //Not clocked in yet
                     {
-                        rStaff.clockIn();
+                        staffBean.clockIn();
                     }
                     if (isManager) {
                         cView.changeMode(cView.MODE_MANAGER);
@@ -128,7 +128,7 @@ public class Controller_GUI {
                         cView.changeMode(cView.MODE_EMPLOYEE);
                     }
                     currentUserID = inputID;
-                    currentUserName = rStaff.getFullName();
+                    currentUserName = staffBean.getFullName();
                     cView.setLoginUserName(currentUserName); //show user name on the view
 
                     return true; //Login success
@@ -180,9 +180,9 @@ public class Controller_GUI {
     }
 
     public boolean addNewOrderItem(int orderID, int addItemID, byte addItemQuantity) {
-        Order rOrder = cDatabase.findOrderByID(orderID);
-        if (currentUserID != rOrder.getStaffID()) {
-            setErrorMessage("You are not eligible to edit the order.\nThe order belonges to " + rOrder.getStaffName() + ")");
+        orderBean = cDatabase.findOrderByID(orderID);
+        if (currentUserID != orderBean.getStaffID()) {
+            setErrorMessage("You are not eligible to edit the order.\nThe order belonges to " + orderBean.getStaffName() + ")");
             return false;
         }
 
@@ -201,9 +201,9 @@ public class Controller_GUI {
     }
 
     public boolean deleteOrderItem(int orderID, int deleteNo) {
-        Order rOrder = cDatabase.findOrderByID(orderID);
-        if (currentUserID != rOrder.getStaffID()) {
-            setErrorMessage("You are not eligible to delete the order.\nThe order belonges to " + rOrder.getStaffName() + ")");
+    	orderBean = cDatabase.findOrderByID(orderID);
+        if (currentUserID != orderBean.getStaffID()) {
+            setErrorMessage("You are not eligible to delete the order.\nThe order belonges to " + orderBean.getStaffName() + ")");
             return false;
         }
 
@@ -216,37 +216,37 @@ public class Controller_GUI {
     }
 
     public boolean closeOrder(int closeOrderID) {
-        Order rOrder = cDatabase.findOrderByID(closeOrderID);
-        if (currentUserID != rOrder.getStaffID()) {
-            setErrorMessage("You are not eligible to delete the order.\n(The order belonges to " + rOrder.getStaffName() + ")");
+    	orderBean = cDatabase.findOrderByID(closeOrderID);
+        if (currentUserID != orderBean.getStaffID()) {
+            setErrorMessage("You are not eligible to delete the order.\n(The order belonges to " + orderBean.getStaffName() + ")");
             return false;
         }
 
-        if (rOrder.getState() != 0) {
+        if (orderBean.getState() != 0) {
             setErrorMessage("The order is already closed or canceled.");
             return false;
         }
         cDatabase.closeOrder(closeOrderID);
         todaysOrderCnt++;
-        totalSales += rOrder.getTotal();
+        totalSales += orderBean.getTotal();
         return true;
     }
 
     public boolean cancelOrder(int cancelOrderID) {
-        Order rOrder = cDatabase.findOrderByID(cancelOrderID);
-        if (currentUserID != rOrder.getStaffID()) {
-            setErrorMessage("You are not eligible to delete the order.\n(The order belonges to " + rOrder.getStaffName() + ")");
+        orderBean = cDatabase.findOrderByID(cancelOrderID);
+        if (currentUserID != orderBean.getStaffID()) {
+            setErrorMessage("You are not eligible to delete the order.\n(The order belonges to " + orderBean.getStaffName() + ")");
             return false;
         }
 
-        if (rOrder.getState() != 0) {
+        if (orderBean.getState() != 0) {
             setErrorMessage("The order is already closed or canceled.");
             return false;
         }
 
         cDatabase.cancelOrder(cancelOrderID);
         todaysCancelCnt++;
-        cancelTotal += rOrder.getTotal();
+        cancelTotal += orderBean.getTotal();
         return true;
     }
 
@@ -261,23 +261,23 @@ public class Controller_GUI {
         ArrayList < String > initData = new ArrayList < String > ();
 
         while (it.hasNext()) {
-            Staff re = (Staff) it.next();
-            String fullName = re.getFullName();
+            staffBean = (Staff) it.next();
+            String fullName = staffBean.getFullName();
             String output = String.format("Staff ID:%4d  Name:%-25s",
-                re.getID(), fullName);
-            switch (re.getWorkState()) {
+                staffBean.getID(), fullName);
+            switch (staffBean.getWorkState()) {
                 case Staff.WORKSTATE_ACTIVE:
-                    output += "[From:" + re.getStartTime() + "]";
+                    output += "[From:" + staffBean.getStartTime() + "]";
                     break;
                 case Staff.WORKSTATE_FINISH:
-                    output += "[From:" + re.getStartTime() + "]";
+                    output += "[From:" + staffBean.getStartTime() + "]";
                     break;
                 default:
                     output += "[Not on work]";
                     break;
             }
 
-            if (re instanceof Manager) {
+            if (staffBean instanceof Manager) {
                 output += " * Manager *";
             }
             initData.add(output);
@@ -295,8 +295,8 @@ public class Controller_GUI {
         String output;
 
         while (it.hasNext()) {
-            Order re = it.next();
-            switch (re.getState()) {
+            orderBean = it.next();
+            switch (orderBean.getState()) {
                 case Order.ORDER_CLOSED:
                     state = "Closed";
                     break;
@@ -309,7 +309,7 @@ public class Controller_GUI {
             }
 
             output = String.format("Order ID:%4d  StaffName:%-20s  Total:$%5.2f State:%-8s\n",
-                re.getOrderID(), re.getStaffName(), re.getTotal(), state);
+                orderBean.getOrderID(), orderBean.getStaffName(), orderBean.getTotal(), state);
             initData.add(output);
         }
         if (initData.isEmpty())
@@ -320,24 +320,22 @@ public class Controller_GUI {
 
 
     public ArrayList < String > createOrderItemlList(int orderID) {
-        Order rOrder = cDatabase.findOrderByID(orderID);
+        orderBean = cDatabase.findOrderByID(orderID);
         ArrayList < String > initData = new ArrayList < String > ();
 
-        if (rOrder == null) {
+        if (orderBean == null) {
             initData.add("No order information");
             return initData;
         }
 
         String output;
 
-        Iterator < OrderDetail > it = rOrder.getOrderDetail().iterator();
-        OrderDetail re;
-
+        Iterator < OrderDetail > it = orderBean.getOrderDetail().iterator();
         int count = 0;
 
         while (it.hasNext()) {
-            re = it.next();
-            output = String.format("%-4d|%-24s|%5d|%5.2f", ++count, re.getItemName(), re.getQuantity(), re.getTotalPrice());
+        	orderDetailBean = it.next();
+            output = String.format("%-4d|%-24s|%5d|%5.2f", ++count, orderDetailBean.getItemName(), orderDetailBean.getQuantity(), orderDetailBean.getTotalPrice());
             initData.add(output);
         }
         if (initData.isEmpty())

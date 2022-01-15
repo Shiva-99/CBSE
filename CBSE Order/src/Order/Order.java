@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import Base.MenuItem;
 
+@Configuration
 @Component
 public class Order {
 	ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 	MenuItem menuItemBean = (MenuItem) context.getBean("menuitembean");
 	OrderDetail orderDetailBean = (OrderDetail) context.getBean("orderdetailbean");
+	OrderDetail orderDetailBeanNew = (OrderDetail) context.getBean("orderdetailbean");
 	
 	
     final public static int ORDER_CLOSED = 1;
@@ -30,10 +33,7 @@ public class Order {
     /**
      * Constructor for objects of class Order
      */
-    public Order() {
-    	
-    }
-    
+
     public Order(int newStaffID, String newStaffName) {
         this.orderID = -1;
         this.state = 0;
@@ -74,24 +74,23 @@ public class Order {
         this.state = state;
     }
 
-    public void addItem(MenuItem rNewMenuItem, byte quantity) {
+    public void addItem(MenuItem menuItemBean, byte quantity) {
         Iterator < OrderDetail > it = orderDetailList.iterator();
-        OrderDetail re;
 
         boolean found = false;
 
         while (it.hasNext() && !found) {
-            re = it.next();
-            if (rNewMenuItem.getID() == re.getItemID()) {
+            orderDetailBean = it.next();
+            if (menuItemBean.getID() == orderDetailBean.getItemID()) {
                 found = true;
-                re.addQuantity(quantity);
+                orderDetailBean.addQuantity(quantity);
             }
         }
 
         if (!found) {
-            OrderDetail detail = new OrderDetail(rNewMenuItem, quantity);
-            orderDetailList.add(detail);
-
+//          orderDetailBeanNew = new OrderDetail(menuItemBean, quantity);
+        	orderDetailBeanNew = orderDetailBean.createNew(menuItemBean, quantity);
+            orderDetailList.add(orderDetailBeanNew);
         }
 
         calculateTotal();
@@ -109,11 +108,10 @@ public class Order {
 
     public void calculateTotal() {
         total = 0;
-        OrderDetail re;
         Iterator < OrderDetail > it = orderDetailList.iterator();
         while (it.hasNext()) {
-            re = it.next();
-            total += re.getTotalPrice();
+        	orderDetailBean = it.next();
+            total += orderDetailBean.getTotalPrice();
         }
     }
 }

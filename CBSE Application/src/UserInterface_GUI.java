@@ -527,16 +527,16 @@ public class UserInterface_GUI extends JFrame implements ActionListener {
                 showMenuList(0);
                 //showAllMenuList(displayArea);
             } else if (ae.getSource() == btnMain) {
-                showMenuList(MenuItem.MAIN);
+                showMenuList(menuItemBean.MAIN);
                 //showParticularMenuList(MenuItem.MAIN, displayArea);
             } else if (ae.getSource() == btnDrink) {
-                showMenuList(MenuItem.DRINK);
+                showMenuList(menuItemBean.DRINK);
                 //showParticularMenuList(MenuItem.DRINK, displayArea);
             } else if (ae.getSource() == btnAlcohol) {
-                showMenuList(MenuItem.ALCOHOL);
+                showMenuList(menuItemBean.ALCOHOL);
                 //showParticularMenuList(MenuItem.ALCOHOL, displayArea);
             } else if (ae.getSource() == btnDessert) {
-                showMenuList(MenuItem.DESSERT);
+                showMenuList(menuItemBean.DESSERT);
                 //showParticularMenuList(MenuItem.DESSERT, displayArea);
             }
         }
@@ -1125,19 +1125,19 @@ public class UserInterface_GUI extends JFrame implements ActionListener {
                 menuScrollPanel.getViewport().setView(menuList);
             } else if (ae.getSource() == btnMain) {
                 //createParticularMenuList(MenuItem.MAIN, menuList);
-                menuList.setListData(rcController.createMenuList(MenuItem.MAIN).toArray());
+                menuList.setListData(rcController.createMenuList(menuItemBean.MAIN).toArray());
                 menuScrollPanel.getViewport().setView(menuList);
             } else if (ae.getSource() == btnDrink) {
                 //createParticularMenuList(MenuItem.DRINK, menuList);
-                menuList.setListData(rcController.createMenuList(MenuItem.DRINK).toArray());
+                menuList.setListData(rcController.createMenuList(menuItemBean.DRINK).toArray());
                 menuScrollPanel.getViewport().setView(menuList);
             } else if (ae.getSource() == btnAlcohol) {
                 //createParticularMenuList(MenuItem.ALCOHOL, menuList);
-                menuList.setListData(rcController.createMenuList(MenuItem.ALCOHOL).toArray());
+                menuList.setListData(rcController.createMenuList(menuItemBean.ALCOHOL).toArray());
                 menuScrollPanel.getViewport().setView(menuList);
             } else if (ae.getSource() == btnDessert) {
                 //createParticularMenuList(MenuItem.DESSERT, menuList);
-                menuList.setListData(rcController.createMenuList(MenuItem.DESSERT).toArray());
+                menuList.setListData(rcController.createMenuList(menuItemBean.DESSERT).toArray());
                 menuScrollPanel.getViewport().setView(menuList);
             }
         }
