@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="menuitembean" class="Base.MenuItem" scope="prototype" autowire-candidate="false" />
+	<bean id="orderdetailbean" class="Order.OrderDetail" scope="prototype" autowire-candidate="false" />
+	<bean id="orderbean" class="Order.Order" scope="prototype" autowire-candidate="false" />
+	<bean id="staffbean" class="Staff.Staff" scope="prototype" autowire-candidate="false" />
+	<bean id="managerbean" class="Staff.Manager" scope="prototype" autowire-candidate="false" />
+
+</beans>
